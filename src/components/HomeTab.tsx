@@ -1,0 +1,107 @@
+import { useState } from 'react'
+import { BOOTHS, TOTAL } from '../lib/booths'
+import { EVENT_EYEBROW, EVENT_TITLE, EVENT_SUBTITLE } from '../lib/config'
+import PuzzleGrid, { pieceStyle } from './PuzzleGrid'
+
+const RING_CIRCUMFERENCE = 201
+
+interface Props {
+  team: string
+  collected: number[]
+  recent: number[]
+  onGoPuzzle: () => void
+  onReset: () => void
+}
+
+export default function HomeTab({ team, collected, recent, onGoPuzzle, onReset }: Props) {
+  const [confirming, setConfirming] = useState(false)
+  const count = collected.length
+  const recentItems = recent.slice(-3).reverse()
+
+  return (
+    <div className="screen">
+      <div className="home-head">
+        <div className="eyebrow">{EVENT_EYEBROW}</div>
+        <div className="jua home-title">{EVENT_TITLE}</div>
+        <div className="jua home-sub">{EVENT_SUBTITLE}</div>
+      </div>
+
+      <div className="team-card">
+        <div className="ring-wrap">
+          <svg width={74} height={74} viewBox="0 0 74 74">
+            <circle cx={37} cy={37} r={32} fill="none" stroke="rgba(255,255,255,.1)" strokeWidth={7} />
+            <circle
+              cx={37}
+              cy={37}
+              r={32}
+              fill="none"
+              stroke="#ffb454"
+              strokeWidth={7}
+              strokeLinecap="round"
+              strokeDasharray={RING_CIRCUMFERENCE}
+              strokeDashoffset={RING_CIRCUMFERENCE - (RING_CIRCUMFERENCE * count) / TOTAL}
+              transform="rotate(-90 37 37)"
+              style={{ transition: 'stroke-dashoffset .8s ease' }}
+            />
+          </svg>
+          <div className="ring-center">
+            <div className="jua ring-num">{count}</div>
+            <div className="ring-denom">/ {TOTAL}</div>
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div className="team-row">
+            <div className="jua team-name">{team}</div>
+            <div className="chip-mint">팀 미션</div>
+          </div>
+          <div className="team-desc">
+            부스에 참여하고 QR을 찍으면 퍼즐 조각을 얻어요. {TOTAL}조각을 모아 그림을 완성하세요!
+          </div>
+        </div>
+      </div>
+
+      <div className="section-row">
+        <div className="jua section-title">우리 조 퍼즐</div>
+        <button className="section-link" onClick={onGoPuzzle}>
+          퍼즐판 보기 →
+        </button>
+      </div>
+      <PuzzleGrid collected={collected} mini onClick={onGoPuzzle} />
+
+      <div className="recent-card">
+        <div className="recent-label">최근 획득</div>
+        {recentItems.length > 0 ? (
+          <div className="recent-list">
+            {recentItems.map((i) => (
+              <div key={i} className="recent-item">
+                <div className="recent-thumb" style={pieceStyle(i)} />
+                <div className="recent-name">{BOOTHS[i].name}</div>
+                <div className="recent-no">조각 {BOOTHS[i].num}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="recent-empty">아직 획득한 조각이 없어요. 부스로 출발!</div>
+        )}
+      </div>
+
+      <div className="reset-row">
+        {confirming ? (
+          <span className="reset-confirm">
+            정말 처음부터 다시 할까요?
+            <button className="reset-yes" onClick={onReset}>
+              초기화
+            </button>
+            <button className="reset-no" onClick={() => setConfirming(false)}>
+              취소
+            </button>
+          </span>
+        ) : (
+          <button className="reset-link" onClick={() => setConfirming(true)}>
+            팀/기록 초기화
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
