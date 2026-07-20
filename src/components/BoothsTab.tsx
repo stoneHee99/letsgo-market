@@ -10,7 +10,7 @@ export default function BoothsTab({ collected }: Props) {
     <div className="screen">
       <div className="jua screen-title">야시장 부스</div>
       <div className="screen-sub">
-        {collected.length}개 부스 참여 완료 · {TOTAL - collected.length}개 남음
+        {collected.length}개 미션 완료 · {TOTAL - collected.length}개 남음
       </div>
       <div className="booth-list">
         {BOOTHS.map((b, i) => {
