@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { TOTAL } from './lib/booths'
 import { extractBoothIndex } from './lib/codes'
-import { awardPiece, markCompleteSeen, resetAll, setTeam, useGame } from './lib/store'
+import { awardPiece, markCompleteSeen, ownedPieces, pieceForBooth, resetAll, setTeam, useGame } from './lib/store'
 import Lanterns from './components/Lanterns'
 import TabBar, { type TabId } from './components/TabBar'
 import HomeTab from './components/HomeTab'
@@ -37,7 +37,7 @@ export default function App() {
 function ParticipantApp() {
   const { ready, state, refresh } = useGame()
   const [tab, setTab] = useState<TabId>('home')
-  const [earned, setEarned] = useState<{ idx: number; dup: boolean } | null>(null)
+  const [earned, setEarned] = useState<{ booth: number; piece: number; dup: boolean } | null>(null)
   const [showComplete, setShowComplete] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const pendingScan = useRef<string | null>(readScanParam())
@@ -62,9 +62,9 @@ function ParticipantApp() {
       setToast('유효하지 않은 QR 링크예요')
       return
     }
-    const result = awardPiece(idx)
+    const { result, piece } = awardPiece(idx)
     refresh()
-    setEarned({ idx, dup: result === 'dup' })
+    setEarned({ booth: idx, piece, dup: result === 'dup' })
   }, [ready, state.team, refresh])
 
   // 토스트 자동 닫기
@@ -82,9 +82,9 @@ function ParticipantApp() {
   }, [ready, earned, state.collected.length, state.completeSeen])
 
   const handleAward = (idx: number): 'new' | 'dup' => {
-    const result = awardPiece(idx)
+    const { result, piece } = awardPiece(idx)
     refresh()
-    if (result === 'new') setEarned({ idx, dup: false })
+    if (result === 'new') setEarned({ booth: idx, piece, dup: false })
     return result
   }
 
@@ -123,8 +123,11 @@ function ParticipantApp() {
             {tab === 'home' && (
               <HomeTab
                 team={state.team}
-                collected={state.collected}
-                recent={state.recent}
+                pieces={ownedPieces(state)}
+                recent={state.collected
+                  .slice(-3)
+                  .reverse()
+                  .map((b) => ({ booth: b, piece: pieceForBooth(state, b) ?? b }))}
                 onGoPuzzle={() => setTab('puzzle')}
                 onReset={handleReset}
               />
@@ -134,10 +137,12 @@ function ParticipantApp() {
               <ScanTab paused={earned != null} collected={state.collected} demo={demo} onAward={handleAward} />
             )}
             {tab === 'puzzle' && (
-              <PuzzleTab collected={state.collected} onShowComplete={() => setShowComplete(true)} />
+              <PuzzleTab pieces={ownedPieces(state)} onShowComplete={() => setShowComplete(true)} />
             )}
             <TabBar tab={tab} onTab={setTab} />
-            {earned && <EarnedModal boothIndex={earned.idx} dup={earned.dup} onClose={closeEarned} />}
+            {earned && (
+              <EarnedModal boothIndex={earned.booth} pieceIndex={earned.piece} dup={earned.dup} onClose={closeEarned} />
+            )}
             {showComplete && state.team && <CompleteOverlay team={state.team} onClose={closeComplete} />}
             {toast && <div className="toast">{toast}</div>}
           </>

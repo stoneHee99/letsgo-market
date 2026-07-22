@@ -7,16 +7,17 @@ const RING_CIRCUMFERENCE = 201
 
 interface Props {
   team: string
-  collected: number[]
-  recent: number[]
+  /** 획득 조각 인덱스 (퍼즐판 표시용) */
+  pieces: number[]
+  /** 최근 획득 내역: 부스 → 조각 (최신순) */
+  recent: { booth: number; piece: number }[]
   onGoPuzzle: () => void
   onReset: () => void
 }
 
-export default function HomeTab({ team, collected, recent, onGoPuzzle, onReset }: Props) {
+export default function HomeTab({ team, pieces, recent, onGoPuzzle, onReset }: Props) {
   const [confirming, setConfirming] = useState(false)
-  const count = collected.length
-  const recentItems = recent.slice(-3).reverse()
+  const count = pieces.length
 
   return (
     <div className="screen">
@@ -66,17 +67,17 @@ export default function HomeTab({ team, collected, recent, onGoPuzzle, onReset }
           퍼즐판 보기 →
         </button>
       </div>
-      <PuzzleGrid collected={collected} mini onClick={onGoPuzzle} />
+      <PuzzleGrid pieces={pieces} mini onClick={onGoPuzzle} />
 
       <div className="recent-card">
         <div className="recent-label">최근 획득</div>
-        {recentItems.length > 0 ? (
+        {recent.length > 0 ? (
           <div className="recent-list">
-            {recentItems.map((i) => (
-              <div key={i} className="recent-item">
-                <div className="recent-thumb" style={pieceStyle(i)} />
-                <div className="recent-name">{BOOTHS[i].name}</div>
-                <div className="recent-no">조각 {BOOTHS[i].num}</div>
+            {recent.map(({ booth, piece }) => (
+              <div key={booth} className="recent-item">
+                <div className="recent-thumb" style={pieceStyle(piece)} />
+                <div className="recent-name">{BOOTHS[booth].name}</div>
+                <div className="recent-no">조각 {String(piece + 1).padStart(2, '0')}</div>
               </div>
             ))}
           </div>

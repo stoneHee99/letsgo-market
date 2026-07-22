@@ -13,13 +13,14 @@ export function pieceStyle(index: number): CSSProperties {
 }
 
 interface Props {
-  collected: number[]
+  /** 공개된 퍼즐 조각 인덱스 목록 */
+  pieces: number[]
   mini?: boolean
   onClick?: () => void
 }
 
-export default function PuzzleGrid({ collected, mini, onClick }: Props) {
-  const has = new Set(collected)
+export default function PuzzleGrid({ pieces, mini, onClick }: Props) {
+  const has = new Set(pieces)
   return (
     <div className={mini ? 'puzzle-frame' : 'puzzle-frame big'} onClick={onClick}>
       <div className="pz-grid">
