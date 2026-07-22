@@ -37,7 +37,7 @@ pnpm preview    # 빌드 결과 미리보기
 | --- | --- |
 | 부스 이름/구역 (16개) | `src/lib/booths.ts` |
 | 행사명·문구·조 개수 | `src/lib/config.ts` |
-| 퍼즐 완성 그림 | `public/puzzle.svg` 교체, 또는 이미지를 `public/`에 넣고 `src/lib/config.ts`의 `PUZZLE_IMAGE` 수정 (세로 0.707 비율 권장 = A4 비율) |
+| 퍼즐 완성 그림 | `public/poster.jpg` 교체 (다른 비율이면 `styles.css`의 `--poster-aspect`도 수정). `public/puzzle.svg`는 예비용 일러스트 |
 | QR 위조 방지 토큰 | `src/lib/codes.ts`의 `SALT` 변경 → 모든 QR 재발급 |
 
 ## 테스트 팁

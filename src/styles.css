@@ -5,6 +5,8 @@
 @import '@fontsource/noto-sans-kr/900.css';
 
 :root {
+  /* 퍼즐 완성 그림의 가로/세로 비율 — 실제 포스터 크기에 맞춰 조정 */
+  --poster-aspect: 0.707;
   --bg: #0b0c16;
   --amber: #ffb454;
   --amber-deep: #f08a2c;
@@ -210,7 +212,7 @@ input {
 .pz-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  aspect-ratio: 0.707;
+  aspect-ratio: var(--poster-aspect);
   background: #0d0e1c;
 }
 .pz-cell { border: 1px solid rgba(255, 255, 255, 0.06); }
@@ -431,7 +433,7 @@ input {
 .earned-name { font-size: 22px; color: var(--cream); margin-top: 6px; }
 .earned-piece {
   width: 120px;
-  height: 170px;
+  aspect-ratio: var(--poster-aspect);
   margin: 16px auto 0;
   border-radius: 14px;
   border: 2px solid var(--amber);
@@ -475,7 +477,7 @@ input {
 }
 .complete-poster {
   width: 240px;
-  aspect-ratio: 0.707;
+  aspect-ratio: var(--poster-aspect);
   margin-top: 20px;
   border-radius: 16px;
   border: 3px solid var(--amber);
