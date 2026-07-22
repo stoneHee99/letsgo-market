@@ -6,6 +6,7 @@ import Lanterns from './components/Lanterns'
 import TabBar, { type TabId } from './components/TabBar'
 import HomeTab from './components/HomeTab'
 import BoothsTab from './components/BoothsTab'
+import BoothDetail from './components/BoothDetail'
 import ScanTab from './components/ScanTab'
 import PuzzleTab from './components/PuzzleTab'
 import EarnedModal from './components/EarnedModal'
@@ -31,10 +32,10 @@ function useHashRoute(): string {
 export default function App() {
   const hash = useHashRoute()
   if (hash.startsWith('#/admin')) return <AdminPage />
-  return <ParticipantApp />
+  return <ParticipantApp hash={hash} />
 }
 
-function ParticipantApp() {
+function ParticipantApp({ hash }: { hash: string }) {
   const { ready, state, refresh } = useGame()
   const [tab, setTab] = useState<TabId>('home')
   const [earned, setEarned] = useState<{ booth: number; piece: number; dup: boolean } | null>(null)
@@ -42,6 +43,20 @@ function ParticipantApp() {
   const [toast, setToast] = useState<string | null>(null)
   const pendingScan = useRef<string | null>(readScanParam())
   const demo = new URLSearchParams(window.location.search).has('demo')
+
+  // #/booth/N — 부스 상세 페이지 (해시 라우팅이라 폰 뒤로가기로 닫힘)
+  const boothMatch = /^#\/booth\/(\d{1,2})$/.exec(hash)
+  const detailIdx = (() => {
+    if (!boothMatch) return null
+    const n = parseInt(boothMatch[1], 10) - 1
+    return n >= 0 && n < TOTAL ? n : null
+  })()
+
+  const clearBoothHash = () => {
+    if (!window.location.hash) return
+    history.replaceState(null, '', window.location.pathname + window.location.search)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  }
 
   // 스캔 링크로 들어왔다면 URL은 바로 정리 (새로고침 시 중복 처리 방지)
   useEffect(() => {
@@ -90,6 +105,7 @@ function ParticipantApp() {
 
   const closeEarned = () => {
     setEarned(null)
+    clearBoothHash()
     setTab('puzzle')
   }
 
@@ -120,26 +136,51 @@ function ParticipantApp() {
           />
         ) : (
           <>
-            {tab === 'home' && (
-              <HomeTab
-                team={state.team}
-                pieces={ownedPieces(state)}
-                recent={state.collected
-                  .slice(-3)
-                  .reverse()
-                  .map((b) => ({ booth: b, piece: pieceForBooth(state, b) ?? b }))}
-                onGoPuzzle={() => setTab('puzzle')}
-                onReset={handleReset}
+            {detailIdx != null ? (
+              <BoothDetail
+                boothIndex={detailIdx}
+                piece={pieceForBooth(state, detailIdx)}
+                onBack={() => history.back()}
+                onGoScan={() => {
+                  clearBoothHash()
+                  setTab('scan')
+                }}
+                onGoPuzzle={() => {
+                  clearBoothHash()
+                  setTab('puzzle')
+                }}
               />
+            ) : (
+              <>
+                {tab === 'home' && (
+                  <HomeTab
+                    team={state.team}
+                    pieces={ownedPieces(state)}
+                    recent={state.collected
+                      .slice(-3)
+                      .reverse()
+                      .map((b) => ({ booth: b, piece: pieceForBooth(state, b) ?? b }))}
+                    onGoPuzzle={() => setTab('puzzle')}
+                    onReset={handleReset}
+                  />
+                )}
+                {tab === 'booths' && (
+                  <BoothsTab
+                    collected={state.collected}
+                    onSelect={(i) => {
+                      window.location.hash = `#/booth/${i + 1}`
+                    }}
+                  />
+                )}
+                {tab === 'scan' && (
+                  <ScanTab paused={earned != null} collected={state.collected} demo={demo} onAward={handleAward} />
+                )}
+                {tab === 'puzzle' && (
+                  <PuzzleTab pieces={ownedPieces(state)} onShowComplete={() => setShowComplete(true)} />
+                )}
+                <TabBar tab={tab} onTab={setTab} />
+              </>
             )}
-            {tab === 'booths' && <BoothsTab collected={state.collected} />}
-            {tab === 'scan' && (
-              <ScanTab paused={earned != null} collected={state.collected} demo={demo} onAward={handleAward} />
-            )}
-            {tab === 'puzzle' && (
-              <PuzzleTab pieces={ownedPieces(state)} onShowComplete={() => setShowComplete(true)} />
-            )}
-            <TabBar tab={tab} onTab={setTab} />
             {earned && (
               <EarnedModal boothIndex={earned.booth} pieceIndex={earned.piece} dup={earned.dup} onClose={closeEarned} />
             )}
