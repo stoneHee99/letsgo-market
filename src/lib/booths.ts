@@ -11,6 +11,9 @@ export interface Booth {
 
 // 부스 9 + 성전 나눔 1 + 버스킹 6 = 16조각 (4×4 퍼즐)
 // 부스 1~9: 1일차 대운동장 · 나눔: 성전 건물 · 버스킹: 2일차 두 광장에서 공연 중 QR 노출
+//
+// ⚠️ QR 전량 인쇄 완료 — 이 배열의 "순서"가 곧 부스 번호(HAMGGE-NN)와 인쇄된 QR의 매핑이다.
+// 항목 순서 변경/삽입/삭제 금지. 이름·설명·팁 텍스트 수정은 안전함.
 interface BoothDef {
   name: string
   zone: string

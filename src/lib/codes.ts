@@ -1,6 +1,9 @@
 import { BOOTHS } from './booths'
 
-// QR 위조/추측 방지용 간단 토큰. SALT를 바꾸면 모든 QR 코드가 새로 발급됩니다.
+// ⚠️ 부스 QR은 이미 전량 인쇄되어 현장에 배포됨 (2026-08-11 기준).
+// 아래 SALT, 토큰 알고리즘(tokenFor), 코드 형식(HAMGGE-NN), URL 형식(?s=CODE.TOKEN)을
+// 바꾸면 인쇄된 QR이 전부 무효화된다. 수련회 종료 전까지 절대 변경 금지.
+// (배포 주소 stonehee99.github.io/letsgo-market 도 QR에 박혀 있음 — 레포 이름 변경 금지)
 const SALT = 'hamgge-2026-summer-letsgo'
 
 // 0/O, 1/I/L 같은 헷갈리는 글자를 뺀 알파벳 (수동 입력용)
