@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import QRCode from 'qrcode'
 import { BOOTHS } from '../lib/booths'
 import { appBaseUrl, manualCodeFor, scanUrl } from '../lib/codes'
-import { EVENT_TITLE, EVENT_SUBTITLE } from '../lib/config'
+import { EVENT_TITLE } from '../lib/config'
 
 const QR_OPTS = { margin: 1, width: 512, color: { dark: '#1d1e2e', light: '#ffffff' } }
 
@@ -22,7 +22,7 @@ export default function AdminPage() {
         <div className="admin-head">
           <div>
             <div className="jua admin-title">
-              {EVENT_TITLE} {EVENT_SUBTITLE} · 부스 QR
+              {EVENT_TITLE} · 부스 QR
             </div>
             <div className="admin-sub">
               각 카드를 인쇄해 부스에 부착하세요. QR은 현재 접속 주소(<code>{appBaseUrl()}</code>) 기준으로

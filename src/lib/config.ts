@@ -5,7 +5,6 @@ export const PUZZLE_IMAGE = base + 'poster.jpg'
 
 export const EVENT_EYEBROW = '2026 청년봉사선교회 여름수련회'
 export const EVENT_TITLE = '함께걷장'
-export const EVENT_SUBTITLE = '야시장 퍼즐 대작전'
 export const COMPLETE_VERSE = '곧은 길로 행하라 — 여호수아 1:7'
 export const POSTER_NAME = '수련회 포스터 「곧은 길로 행하라」'
 

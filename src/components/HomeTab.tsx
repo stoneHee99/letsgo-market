@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BOOTHS, TOTAL } from '../lib/booths'
-import { EVENT_EYEBROW, EVENT_TITLE, EVENT_SUBTITLE } from '../lib/config'
+import { EVENT_EYEBROW, EVENT_TITLE } from '../lib/config'
 import PuzzleGrid, { pieceStyle } from './PuzzleGrid'
 
 const RING_CIRCUMFERENCE = 201
@@ -24,7 +24,6 @@ export default function HomeTab({ team, pieces, recent, onGoPuzzle, onReset }: P
       <div className="home-head">
         <div className="eyebrow">{EVENT_EYEBROW}</div>
         <div className="jua home-title">{EVENT_TITLE}</div>
-        <div className="jua home-sub">{EVENT_SUBTITLE}</div>
       </div>
 
       <div className="team-card">

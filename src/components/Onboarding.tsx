@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { EVENT_EYEBROW, EVENT_TITLE, EVENT_SUBTITLE, TEAM_COUNT } from '../lib/config'
+import { EVENT_EYEBROW, EVENT_TITLE, TEAM_COUNT } from '../lib/config'
 
 interface Props {
   onDone: (team: string) => void
@@ -20,7 +20,6 @@ export default function Onboarding({ onDone }: Props) {
       <div className="home-head" style={{ marginTop: 40 }}>
         <div className="eyebrow">{EVENT_EYEBROW}</div>
         <div className="jua home-title">{EVENT_TITLE}</div>
-        <div className="jua home-sub">{EVENT_SUBTITLE}</div>
       </div>
 
       <div className="onboard-card">
