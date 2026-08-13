@@ -38,6 +38,7 @@ export default function App() {
 function ParticipantApp({ hash }: { hash: string }) {
   const { ready, state, refresh } = useGame()
   const [tab, setTab] = useState<TabId>('home')
+  const [changingTeam, setChangingTeam] = useState(false)
   const [earned, setEarned] = useState<{ booth: number; piece: number; dup: boolean } | null>(null)
   const [showComplete, setShowComplete] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
@@ -134,6 +135,17 @@ function ParticipantApp({ hash }: { hash: string }) {
               refresh()
             }}
           />
+        ) : changingTeam ? (
+          <Onboarding
+            changing
+            initialTeam={state.team}
+            onDone={(team) => {
+              setTeam(team)
+              refresh()
+              setChangingTeam(false)
+            }}
+            onCancel={() => setChangingTeam(false)}
+          />
         ) : (
           <>
             {detailIdx != null ? (
@@ -161,6 +173,7 @@ function ParticipantApp({ hash }: { hash: string }) {
                       .reverse()
                       .map((b) => ({ booth: b, piece: pieceForBooth(state, b) ?? b }))}
                     onGoPuzzle={() => setTab('puzzle')}
+                    onChangeTeam={() => setChangingTeam(true)}
                     onReset={handleReset}
                   />
                 )}

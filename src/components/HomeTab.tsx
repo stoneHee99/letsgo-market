@@ -12,10 +12,11 @@ interface Props {
   /** 최근 획득 내역: 부스 → 조각 (최신순) */
   recent: { booth: number; piece: number }[]
   onGoPuzzle: () => void
+  onChangeTeam: () => void
   onReset: () => void
 }
 
-export default function HomeTab({ team, pieces, recent, onGoPuzzle, onReset }: Props) {
+export default function HomeTab({ team, pieces, recent, onGoPuzzle, onChangeTeam, onReset }: Props) {
   const [confirming, setConfirming] = useState(false)
   const count = pieces.length
 
@@ -52,7 +53,9 @@ export default function HomeTab({ team, pieces, recent, onGoPuzzle, onReset }: P
         <div style={{ flex: 1 }}>
           <div className="team-row">
             <div className="jua team-name">{team}</div>
-            <div className="chip-mint">팀 미션</div>
+            <button className="team-edit" onClick={onChangeTeam}>
+              조 변경
+            </button>
           </div>
           <div className="team-desc">
             부스에 참여하고 QR을 찍으면 퍼즐 조각을 얻어요. {TOTAL}조각을 모아 그림을 완성하세요!

@@ -8,5 +8,6 @@ export const EVENT_TITLE = '함께걷장'
 export const COMPLETE_VERSE = '곧은 길로 행하라 — 여호수아 1:7'
 export const POSTER_NAME = '수련회 포스터 「곧은 길로 행하라」'
 
-/** 조 선택 화면에 표시할 조 개수 */
-export const TEAM_COUNT = 12
+/** 조 구성: 1~45조 일반조, 46조부터 스탭조 */
+export const REGULAR_TEAMS = 45
+export const TEAM_COUNT = 51

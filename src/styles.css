@@ -579,21 +579,37 @@ input {
   padding: 18px;
 }
 .onboard-label { font-size: 13px; font-weight: 700; color: #ffd9a0; }
+.team-section-label {
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--mint);
+}
 .team-grid {
-  margin-top: 12px;
+  margin-top: 8px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
 }
 .team-chip {
   font-family: 'Jua', 'Noto Sans KR', sans-serif;
-  font-size: 15px;
-  padding: 10px 0;
+  font-size: 13.5px;
+  padding: 9px 0;
   text-align: center;
-  border-radius: 12px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #b9b0c5;
+}
+.team-edit {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mint);
+  background: rgba(142, 227, 216, 0.12);
+  border-radius: 99px;
+  padding: 3px 10px;
+  white-space: nowrap;
 }
 .team-chip.selected {
   background: linear-gradient(180deg, #ffb454, #f08a2c);
